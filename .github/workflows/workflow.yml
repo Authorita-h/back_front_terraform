@@ -34,10 +34,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create ECR repository
-        run: |
-          echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')"
-          echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')"
+      - name: Create frontend ECR repository
+        run: echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')"
+      
+      - name: Create frontend ECR repository
+        run: echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')"
           
 #   build_docker_images:
 #     runs-on: self-hosted
