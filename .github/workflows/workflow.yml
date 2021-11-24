@@ -10,14 +10,13 @@ on:
   workflow_dispatch:
 
 env: 
-  AWS_REGION: 'eu-central-1'
+  AWS_ECR_FRONTEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }}
+  AWS_ECR_BACKEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
+  
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+  create_repositories:
+    runs-on: self-hosted
 
     steps:
 
@@ -29,11 +28,20 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Create ECR repository
-        run: aws ecr create-repository --repository-name ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri'
+        run: |
+          echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')
+          echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query  'repository.repositoryUri')
+          
+#   build_docker_images:
+#     runs-on: self-hosted
+        
+#     steps:
+#       - name: Build docker images
+#         run: docker build -t 
