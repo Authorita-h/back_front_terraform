@@ -1,0 +1,4 @@
+locals {
+  workspace = terraform.workspace
+}
+
