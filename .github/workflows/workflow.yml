@@ -50,7 +50,7 @@ jobs:
       - name: Checkout frontend_repository
         uses: actions/checkout@v2
         with:
-          repository: frontend_intern_Maksim
+          repository: Authorita-h/frontend_intern_Maksim
           token: ${{ secrets.GIT_TOKEN }} 
         
       - name: Check
