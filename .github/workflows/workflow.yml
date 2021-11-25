@@ -37,12 +37,16 @@ jobs:
 
       - name: Create frontend ECR repository
         id: ecr_frontend_uri
-        run: echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
+        run: | 
+          echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' ||
+          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri')"
       
       - name: Create backend ECR repository
         id: ecr_backend_uri
-        run: echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
-          
+        run: |
+          echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' ||
+          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri')"
+         
   build_and_push_frontend_image:
     runs-on: self-hosted
     needs: [create_repositories]
