@@ -54,7 +54,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }} 
       
       - name: Build docker images
-        run: docker build -t ${{ needs.create_repositories.outputs.ecr_frontend_uri }} -t frontend
+        run: docker build -t ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
         
       - name: Push repository
         run: docker push ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
@@ -70,7 +70,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }} 
       
       - name: Build docker images
-        run: docker build -t ${{ needs.create_repositories.outputs.ecr_backend_uri }} -t backend
+        run: docker build -t ${{ needs.create_repositories.outputs.ecr_backend_uri }}
         
       - name: Push repository
         run: docker push ${{ needs.create_repositories.outputs.ecr_backend_uri }}
