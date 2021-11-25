@@ -14,34 +14,47 @@ env:
   AWS_ECR_BACKEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
 
 jobs:
-  create_repositories:
-    runs-on: self-hosted
-
-    steps:
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Create frontend ECR repository
-        run: echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
-      
-      - name: Create backend ECR repository
-        run: echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
-          
-#   build_docker_images:
+#   create_repositories:
 #     runs-on: self-hosted
-        
+#     outputs:
+#       ecr_frontend_uri: ${{ steps.ecr_frontend_uri.outputs.frontend_repository_uri }}
+#       ecr_backend_uri: ${{ steps.ecr_backend_uri.outputs.backend_repository_uri }}
 #     steps:
+      
+#       - name: Checkout
+#         uses: actions/checkout@v2
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Create frontend ECR repository
+#         id: ecr_frontend_uri
+#         run: echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
+      
+#       - name: Create backend ECR repository
+#         id: ecr_backend_uri
+#         run: echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri')"
+          
+  build_images:
+    runs-on: self-hosted
+        
+    steps:
+      - name: Checkout frontend_repository
+        uses: actions/checkout@v2
+        with:
+          repository: Authorita-h/frontend_intern_Maksim
+          token: ${{ secrets.GIT_TOKEN }} 
+        
+      - name: Check
+        run: ls -la 
+      
 #       - name: Build docker images
 #         run: docker build -t 
