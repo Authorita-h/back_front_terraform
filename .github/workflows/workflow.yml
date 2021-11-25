@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }} 
           
       - name: test
-        run: echo ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
+        run: echo ${{ needs.create_repositories.outputs.test }}
         
       - name: test
         run: echo ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
