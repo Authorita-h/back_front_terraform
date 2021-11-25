@@ -49,7 +49,7 @@ jobs:
       - name: Create backend ECR repository
         id: test
         run: |
-          echo "::set-output name=test::$(echo test)"
+          echo "::set-output name=test::$(echo \"test\")"
          
   build_and_push_frontend_image:
     runs-on: self-hosted
