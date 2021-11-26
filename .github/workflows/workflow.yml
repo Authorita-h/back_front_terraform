@@ -39,12 +39,12 @@ jobs:
       - name: Create frontend ECR repository
         id: ecr_frontend_uri
         run: | 
-          echo "::set-output name=frontend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri')"
+          echo "::set-output name=frontend_repository_uri::$(echo aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri')"
       
       - name: Create backend ECR repository
         id: ecr_backend_uri
         run: |
-          echo "::set-output name=backend_repository_uri::$(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri')"
+          echo "::set-output name=backend_repository_uri::$(echo aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri')"
          
       - name: Create backend ECR repository
         id: test
@@ -64,9 +64,13 @@ jobs:
       - name: test
         run: echo ${{ needs.create_repositories.outputs.test }}
         
-      - name: test
-        run: echo ${{ needs.create_repositories.outputs.frontend_repository_uri }}
+      - name: test frontend
+        run: echo ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
       
+      - name: test backend
+        run: echo ${{ needs.create_repositories.outputs.ecr_backend_uri }}
+        
+        
 #       - name: Build docker images
 #         run: docker build -t ${{ needs.create_repositories.outputs.ecr_frontend_uri }} .
         
