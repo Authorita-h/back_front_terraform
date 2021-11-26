@@ -40,8 +40,8 @@ jobs:
         id: ecr_frontend_uri
         run: | 
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-          $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
-          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
+          $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ secrets.AWS_REGION }} --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ secrets.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
 #           echo "::set-output name=frontend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))"
       
@@ -71,7 +71,7 @@ jobs:
         run: |
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
           $(echo $(aws ecr describe-repositories \
-            --region ${{ env.AWS_REGION }} \
+            --region ${{ secrets.AWS_REGION }} \
             --repository-names ${{ env.AWS_ECR_FRONTEND }} \
             --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
