@@ -43,6 +43,7 @@ jobs:
             $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
             aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
             >> $GITHUB_ENV
+          echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
 #           echo "::set-output name=frontend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))"
       
       - name: Create backend ECR repository
