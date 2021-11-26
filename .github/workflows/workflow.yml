@@ -65,7 +65,7 @@ jobs:
         run: echo ${{ needs.create_repositories.outputs.test }}
         
       - name: test
-        run: echo ${{ needs.create_repositories.outputs.ecr_frontend_uri }}
+        run: echo ${{ needs.create_repositories.outputs.frontend_repository_uri }}
       
 #       - name: Build docker images
 #         run: docker build -t ${{ needs.create_repositories.outputs.ecr_frontend_uri }} .
