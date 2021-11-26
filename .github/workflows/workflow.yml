@@ -69,11 +69,11 @@ jobs:
       
       - name: Get image url
         run: |
-          echo AWS_ECR_FRONTEND_REPOSITORY_URI=\
+          echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
             $(aws ecr describe-repositories \
               --region ${{ env.AWS_REGION }} \
               --repository-names ${{ env.AWS_ECR_FRONTEND }} \
-              --query 'repositories[0].repositoryUri'))") \
+              --query 'repositories[0].repositoryUri'))" \
             >> $GITHUB_ENV
           echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
       
