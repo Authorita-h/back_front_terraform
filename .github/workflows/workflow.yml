@@ -86,7 +86,7 @@ jobs:
             --query 'repository.repositoryUri' || \
           aws ecr describe-repositories \
             --region ${{ env.AWS_REGION }} \
-            --repository-names ${{ secrets.AWS_ECR_FRONTEND }} \
+            --repository-names ${{ env.AWS_ECR_FRONTEND }} \
             --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
           
@@ -128,7 +128,7 @@ jobs:
             --query 'repository.repositoryUri' || \
           aws ecr describe-repositories \
             --region ${{ env.AWS_REGION }} \
-            --repository-names ${{ secrets.AWS_ECR_BACKEND }} \
+            --repository-names ${{ env.AWS_ECR_BACKEND }} \
             --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
           
