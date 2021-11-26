@@ -70,7 +70,7 @@ jobs:
         run: echo ${{ needs.create_repositories.outputs.test }}
         
       - name: test frontend
-        run: echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}
+        run: echo ${{ needs.create_repositories.env.AWS_ECR_FRONTEND_REPOSITORY_URI }}
       
       - name: test backend
         run: echo ${{ needs.create_repositories.outputs.ecr_backend_uri }}
