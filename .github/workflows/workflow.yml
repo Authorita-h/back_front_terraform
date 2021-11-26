@@ -40,19 +40,18 @@ jobs:
         id: ecr_frontend_uri
         run: | 
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-            $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
-            aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
-            >> $GITHUB_ENV
-          echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
+          $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
+          >> $GITHUB_ENV
 #           echo "::set-output name=frontend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))"
       
       - name: Create backend ECR repository
         id: ecr_backend_uri
         run: |
           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
-            $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
-            aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri'))" \
-            >> $GITHUB_ENV
+          $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri'))" \
+          >> $GITHUB_ENV
           
 #           echo "::set-output name=backend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri'))"
          
@@ -71,10 +70,10 @@ jobs:
       - name: Get image url
         run: |
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-            $(aws ecr describe-repositories \
-            --region ${{ env.AWS_REGION }} \
-            --repository-names ${{ env.AWS_ECR_FRONTEND }} \
-            --query 'repositories[0].repositoryUri')" \
+          $(aws ecr describe-repositories \
+          --region ${{ env.AWS_REGION }} \
+          --repository-names ${{ env.AWS_ECR_FRONTEND }} \
+          --query 'repositories[0].repositoryUri')" \
             >> $GITHUB_ENV
           echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
       
