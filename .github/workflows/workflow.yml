@@ -75,6 +75,9 @@ jobs:
             --repository-names ${{ env.AWS_ECR_FRONTEND }} \
             --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
+          
+      - name: Checking ... 
+        run:
           echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
       
 #       - name: Build docker images
