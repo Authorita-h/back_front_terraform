@@ -91,7 +91,7 @@ jobs:
           >> $GITHUB_ENV
           
       - name: Check ... 
-        run: echo ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }} 
+        run: echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
       
       - name: Build docker images
         run: docker build -t ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} .
