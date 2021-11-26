@@ -52,6 +52,9 @@ jobs:
         id: test
         run: |
           echo "::set-output name=test::$(echo \"test\")"
+          
+      - name: test frontend
+        run: echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}
          
   build_and_push_frontend_image:
     runs-on: self-hosted
