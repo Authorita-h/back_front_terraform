@@ -80,14 +80,14 @@ jobs:
       - name: Create frontend ECR repository
         run: | 
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-            $(echo $(aws ecr create-repository \
-              --repository-name ${{ env.AWS_ECR_FRONTEND }} \
-              --region ${{ secrets.AWS_REGION }} \
-              --query 'repository.repositoryUri' || \
-            aws ecr describe-repositories \
-              --region ${{ env.AWS_REGION }} \
-              --repository-names ${{ secrets.AWS_ECR_FRONTEND }} \
-              --query 'repositories[0].repositoryUri'))" \
+          $(echo $(aws ecr create-repository \
+            --repository-name ${{ env.AWS_ECR_FRONTEND }} \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories \
+            --region ${{ env.AWS_REGION }} \
+            --repository-names ${{ secrets.AWS_ECR_FRONTEND }} \
+            --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
       
       - name: Build docker images
@@ -116,17 +116,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create frontend ECR repository
+      - name: Create backend ECR repository
         run: | 
           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
-            $(echo $(aws ecr create-repository \
-              --repository-name ${{ env.AWS_ECR_BACKEND }} \
-              --region ${{ secrets.AWS_REGION }} \
-              --query 'repository.repositoryUri' || \
-            aws ecr describe-repositories \
-              --region ${{ env.AWS_REGION }} \
-              --repository-names ${{ secrets.AWS_ECR_BACKEND }} \
-              --query 'repositories[0].repositoryUri'))" \
+          $(echo $(aws ecr create-repository \
+            --repository-name ${{ env.AWS_ECR_BACKEND }} \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories \
+            --region ${{ env.AWS_REGION }} \
+            --repository-names ${{ secrets.AWS_ECR_BACKEND }} \
+            --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
       
       - name: Build docker images
