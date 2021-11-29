@@ -144,9 +144,9 @@ jobs:
   create_infrastructure:
     runs-on: self-hosted
     env:
-      TF_VAR_DB_NAME: ${{ secret.TF_VAR_DB_NAME }}
-      TF_VAR_DB_PASSWORD: ${{ secret.TF_VAR_DB_PASSWORD }} 
-      TF_VAR_DB_USERNAME: ${{ secret.TF_VAR_DB_USERNAME }} 
+      TF_VAR_DB_NAME: ${{ secrets.TF_VAR_DB_NAME }}
+      TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }} 
+      TF_VAR_DB_USERNAME: ${{ secrets.TF_VAR_DB_USERNAME }} 
     needs: [build_and_push_backend_image, build_and_push_frontend_image]
     defaults: 
       run: 
