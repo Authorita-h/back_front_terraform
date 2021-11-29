@@ -193,6 +193,6 @@ jobs:
       - name: Run terraform
         run: terraform apply \
           -auto-approve \
-          -var 'frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' \
+          -var 'frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}'\
           -var 'backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
         
