@@ -191,5 +191,6 @@ jobs:
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
         
       - name: Run terraform
-        run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+        run: terraform plan -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+#         run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
         
