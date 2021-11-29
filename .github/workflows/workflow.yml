@@ -169,7 +169,7 @@ jobs:
       - name: Create frontend ECR repository
         run: | 
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-            $(echo $(aws ecr describe-repositories \
+          $(echo $(aws ecr describe-repositories \
               --region ${{ env.AWS_REGION }} \
               --repository-names ${{ env.AWS_ECR_FRONTEND }} \
               --query 'repositories[0].repositoryUri'))" \
@@ -178,7 +178,7 @@ jobs:
       - name: Create backend ECR repository
         run: | 
           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
-            $(echo $(aws ecr describe-repositories \
+          $(echo $(aws ecr describe-repositories \
               --region ${{ env.AWS_REGION }} \
               --repository-names ${{ env.AWS_ECR_BACKEND }} \
               --query 'repositories[0].repositoryUri'))" \
