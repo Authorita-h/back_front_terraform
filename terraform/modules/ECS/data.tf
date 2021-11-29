@@ -27,6 +27,9 @@ data "template_file" "ecr_backend_image_path" {
     workspace             = local.workspace
     image_repository_path = var.backend_repository_url
     database_host         = var.DB_HOST
+    database_name         = var.DB_NAME
+    database_password     = var.DB_PASSWORD
+    database_user         = var.DB_USERNAME
   }
 }
 

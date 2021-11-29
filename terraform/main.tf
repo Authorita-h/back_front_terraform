@@ -2,13 +2,13 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-# terraform {
-#   backend "s3" {
-#     bucket = "remote-state.bucket"
-#     key    = "infrastructure/terraform.tfstate"
-#     region = "eu-central-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "remote-state.bucket"
+    key    = "infrastructure/terraform.tfstate"
+    region = "eu-central-1"
+  }
+}
 
 module "rds_database" {
   source      = "./modules/RDS"
@@ -25,4 +25,7 @@ module "ecs_cluster" {
     module.rds_database
   ]
   DB_HOST = module.rds_database.rds_endpoint_address.endpoint
+  DB_NAME     = var.DB_NAME
+  DB_USERNAME = var.DB_USERNAME
+  DB_PASSWORD = var.DB_PASSWORD
 }
