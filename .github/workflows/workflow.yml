@@ -171,7 +171,7 @@ jobs:
           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
             $(echo $(aws ecr describe-repositories \
               --region ${{ env.AWS_REGION }} \
-              --repository-names ${{ secrets.AWS_ECR_FRONTEND }} \
+              --repository-names ${{ env.AWS_ECR_FRONTEND }} \
               --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
           
@@ -180,7 +180,7 @@ jobs:
           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
             $(echo $(aws ecr describe-repositories \
               --region ${{ env.AWS_REGION }} \
-              --repository-names ${{ secrets.AWS_ECR_BACKEND }} \
+              --repository-names ${{ env.AWS_ECR_BACKEND }} \
               --query 'repositories[0].repositoryUri'))" \
           >> $GITHUB_ENV
         
