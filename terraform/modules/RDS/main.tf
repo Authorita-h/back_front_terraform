@@ -4,8 +4,8 @@ resource "aws_security_group" "rds_security_group" {
   vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 5432
+    from_port   = var.DB_PORT
+    to_port     = var.DB_PORT
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

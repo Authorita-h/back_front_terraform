@@ -33,3 +33,17 @@ variable "DB_PASSWORD" {
 variable "DB_USERNAME" {
   type = string
 }
+
+# variable "frontend_port" {
+#   type = number
+#   default = 80
+# }
+
+# variable "backend_port" {
+#   type = number
+# }
+
+variable "DB_PORT" {
+  type = number
+  default = 5432
+}

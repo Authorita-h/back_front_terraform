@@ -17,3 +17,29 @@ variable "DB_PASSWORD" {
 variable "DB_USERNAME" {
   type = string
 }
+
+variable "GOOGLE_CLIENT_ID" {
+  type = string
+}
+
+variable "GOOGLE_CLIENT_SECRET" {
+  type = string
+}
+
+variable "frontend_port" {
+  type = number
+  default = 8080
+}
+
+variable "backend_port" {
+  type = number
+  default = 3000
+}
+
+variable "site_domain" {
+  type = string
+}
+
+# variable "backend_hostname" {
+#   type = string
+# }

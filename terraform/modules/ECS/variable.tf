@@ -4,7 +4,7 @@ locals {
 
 variable "instance_type" {
   type = string
-  default = "t2.micro"
+  default = "t3a.medium"
 }
 
 variable "max_instances" {
@@ -56,10 +56,35 @@ variable "DB_USERNAME" {
   type = string
 }
 
-# variable "ecs_cluster_id" {
-  
-# }
+variable "GOOGLE_CLIENT_ID" {
+  type = string
+}
 
-# variable "ecs_task_defenition_arn" {
-  
+variable "GOOGLE_CLIENT_SECRET" {
+  type = string
+}
+
+variable "frontend_target_group" {
+  type = string
+}
+
+variable "backend_target_group" {
+  type = string
+}
+
+variable "frontend_port" {
+  type = number
+  default = 80
+}
+
+variable "backend_port" {
+  type = number
+}
+
+variable "site_domain" {
+  type = string
+}
+
+# variable "backend_hostname" {
+#   type = string
 # }

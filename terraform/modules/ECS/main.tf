@@ -4,22 +4,22 @@ resource "aws_security_group" "new_security_group" {
   vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 80
+    from_port   = var.frontend_port
+    to_port     = var.frontend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0
+    from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0
-    to_port     = 3000
+    from_port   = var.backend_port
+    to_port     = var.backend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -60,11 +60,13 @@ resource "aws_autoscaling_group" "new_asg" {
 
 resource "aws_ecs_task_definition" "ecs_frontend_task_defenition" {
   family                = "${local.workspace}-frontend-service"
+  network_mode          = "awsvpc"
   container_definitions = data.template_file.ecr_frontend_image_path.rendered
 }
 
 resource "aws_ecs_task_definition" "ecs_backend_task_defenition" {
   family                = "${local.workspace}-backend-service"
+  network_mode          = "awsvpc"
   container_definitions = data.template_file.ecr_backend_image_path.rendered
 }
 
@@ -88,6 +90,18 @@ resource "aws_ecs_service" "frontend_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_frontend_task_defenition.arn
   desired_count   = var.task_count
+
+  network_configuration {
+    security_groups  = [aws_security_group.new_security_group.id]
+    subnets          = data.aws_subnet_ids.subnet_ids.ids
+    assign_public_ip = false
+  }
+
+  load_balancer {
+    target_group_arn = var.frontend_target_group
+    container_name   = "${local.workspace}-frontend-service"
+    container_port   = var.frontend_port
+  }
 }
 
 resource "aws_ecs_service" "backend_service" {
@@ -95,4 +109,16 @@ resource "aws_ecs_service" "backend_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.ecs_backend_task_defenition.arn
   desired_count   = var.task_count
+
+  network_configuration {
+    security_groups  = [aws_security_group.new_security_group.id]
+    subnets          = data.aws_subnet_ids.subnet_ids.ids
+    assign_public_ip = false
+  }
+
+  load_balancer {
+    target_group_arn = var.backend_target_group
+    container_name   = "${local.workspace}-backend-service"
+    container_port   = var.backend_port
+  }
 }
