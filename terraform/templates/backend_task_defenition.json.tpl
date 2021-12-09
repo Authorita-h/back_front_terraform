@@ -1,7 +1,7 @@
 [
     {
         "name": "${workspace}-backend-service",
-        "image": "${image_repository_path}:latest",
+        "image": ${image_repository_path},
         "memory": 2048,
         "essentials": true,
         "portMappings": [
