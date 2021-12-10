@@ -36,7 +36,7 @@ module "ecs_cluster" {
   backend_target_group = module.load_balancer.backend_lb_target_group.arn
   frontend_port = var.frontend_port
   backend_port = var.backend_port
-  site_domain = var.site_domain
+  site_domain = module.load_balancer.load_balancer.dns_name
 }
 
 module "load_balancer" {
