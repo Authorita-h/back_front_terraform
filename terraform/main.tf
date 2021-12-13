@@ -10,6 +10,12 @@ terraform {
   }
 }
 
+  module "load_balancer" {
+    source = "./modules/LB" 
+    frontend_port = var.frontend_port
+    backend_port = var.backend_port
+  }
+
 module "rds_database" {
   source      = "./modules/RDS"
   DB_NAME     = var.DB_NAME
@@ -37,12 +43,6 @@ module "ecs_cluster" {
   frontend_port = var.frontend_port
   backend_port = var.backend_port
   site_domain = module.load_balancer.load_balancer.dns_name
-}
-
-module "load_balancer" {
-  source = "./modules/LB" 
-  frontend_port = var.frontend_port
-  backend_port = var.backend_port
 }
 
 module "route53" {
