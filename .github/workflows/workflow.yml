@@ -32,6 +32,12 @@ jobs:
       - name: Checkout terraform
         uses: actions/checkout@v2
         
+      - name: Terraform initialization
+        run: terraform init 
+        
+      - name: Select workspace
+        run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
+        
       - name: Run terraform to create loadbalancer
         run: terraform apply -target module.load_balancer -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
         
