@@ -14,6 +14,34 @@ env:
   AWS_ECR_BACKEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
 
 jobs:
+  create_lb:
+    runs-on: self-hosted
+    env:
+      TF_VAR_DB_NAME: ${{ secrets.TF_VAR_DB_NAME }}
+      TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }} 
+      TF_VAR_DB_USERNAME: ${{ secrets.TF_VAR_DB_USERNAME }} 
+      TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
+    defaults: 
+      run: 
+        working-directory: terraform
+    outputs:
+      lb_dns_name: ${{ steps.lb_dns_name.outputs.lb_dns }}
+    steps:
+      - name: Checkout terraform
+        uses: actions/checkout@v2
+        
+      - name: Run terraform to create loadbalancer
+        run: terraform apply -target module.load_balancer -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+        
+      - name: Refresh state
+        run: terraform refresh
+        
+      - name: Terraform output
+        id: lb_dns_name
+        run: echo "::set-output name=lb_dns::$(terraform output -raw load_balancer_dns_name)" 
+        
 #   create_repositories:
 #     runs-on: self-hosted
 #     outputs:
@@ -150,6 +178,7 @@ jobs:
       TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
+    needs: [create_lb]
 #     needs: [build_and_push_backend_image, build_and_push_frontend_image]
     defaults: 
       run: 
@@ -195,5 +224,5 @@ jobs:
         
       - name: Run terraform
         run: terraform destroy -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
-#      
+     
         
