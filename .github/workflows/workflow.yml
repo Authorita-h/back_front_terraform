@@ -39,7 +39,7 @@ jobs:
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
         
       - name: Run terraform to create loadbalancer
-        run: terraform apply -target module.load_balancer -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+        run: terraform apply -auto-approve -target module.load_balancer -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
         
       - name: Refresh state
         run: terraform refresh
@@ -229,6 +229,6 @@ jobs:
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
         
       - name: Run terraform
-        run: terraform destroy -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+        run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
      
         
