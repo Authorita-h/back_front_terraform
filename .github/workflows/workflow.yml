@@ -114,7 +114,7 @@ jobs:
         run: terraform init 
         
       - name: Run terraform
-        run: terraform destroy -auto-approve
+        run: terraform apply -auto-approve
      
   create_infrastructure:
     runs-on: self-hosted
