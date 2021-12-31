@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 env: 
-  AWS_ECR_FRONTEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }} 
-  AWS_ECR_BACKEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
+  AWS_ECR_FRONTEND: ${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }} 
+  AWS_ECR_BACKEND: ${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
 
 jobs:    
   build_and_push_frontend_image:
