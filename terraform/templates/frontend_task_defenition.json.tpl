@@ -1,7 +1,7 @@
 [
     {
         "name": "${workspace}-frontend-service",
-        "image": ${image_repository_path},
+        "image": "${image_repository_path}",
         "memory": 256,
         "essentials": true,
         "portMappings": [
@@ -13,7 +13,7 @@
         "environment": [
             {
             "name": "REACT_APP_BACKEND_HOSTNAME",
-            "value": "http://${backend_hostname}:{backend_port}"
+            "value": "https://${env}${backend_hostname}/"
             }
         ]
     }

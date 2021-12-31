@@ -1,7 +1,7 @@
 [
     {
         "name": "${workspace}-backend-service",
-        "image": ${image_repository_path},
+        "image": "${image_repository_path}",
         "memory": 2048,
         "essentials": true,
         "portMappings": [
@@ -49,7 +49,7 @@
             },
             {
                 "name": "FRONTEND_URL",
-                "value": "http://${frontend_url}:${frontend_port}"
+                "value": "https://${env}${frontend_url}"
             }
         ]
     }

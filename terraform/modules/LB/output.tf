@@ -17,3 +17,11 @@ output "backend_lb_target_group" {
 output "load_balancer" {
     value = aws_lb.application_load_balancer
 }
+
+output "certificate" {
+    value = aws_acm_certificate.cert
+}
+
+output "lb_sg" {
+    value = aws_security_group.lb_security_group
+}

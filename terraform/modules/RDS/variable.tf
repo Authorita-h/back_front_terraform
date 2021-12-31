@@ -47,3 +47,7 @@ variable "DB_PORT" {
   type = number
   default = 5432
 }
+
+variable "rds_sg" {
+  type = string
+}

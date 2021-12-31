@@ -3,11 +3,18 @@ resource "aws_security_group" "rds_security_group" {
   description = "HTTP"
   vpc_id      = data.aws_vpc.vpc.id
 
+  # ingress {
+  #   from_port   = var.DB_PORT
+  #   to_port     = var.DB_PORT
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
   ingress {
-    from_port   = var.DB_PORT
-    to_port     = var.DB_PORT
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    security_groups = [ var.rds_sg ]
   }
 
   egress {

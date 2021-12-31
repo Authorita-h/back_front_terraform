@@ -13,3 +13,18 @@ variable "load_balancer_name" {
 variable "load_balancer_zone_id" {
   type = string
 }
+
+variable "cert" {
+  
+}
+
+# variable "zone_id" {
+#   type = string
+# }
+# variable "cert_record" {
+#   type = string
+# }
+
+# variable "cert_value" {
+#   type = string
+# }

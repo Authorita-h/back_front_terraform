@@ -18,3 +18,11 @@ variable "frontend_port" {
 variable "backend_port" {
   type = number
 }
+
+variable "site_domain" {
+  type = string
+}
+
+# variable "cert_arn" {
+#   type = string
+# }
