@@ -167,11 +167,11 @@ jobs:
         run: terraform init 
         
       - name: Select workspace
-        if: ${{ env.environment }} != "main"
+        if: ${{ ${{ env.environment }} != "main" }}
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
       
       - name: Select workspace
-        if: ${{ env.environment }} == "main"
+        if: ${{ ${{ env.environment }} == "main" }}
         run: terraform workspace select prod || terraform workspace new prod
         
       - name: Run terraform
