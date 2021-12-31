@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main ]
 
@@ -13,170 +13,109 @@ env:
   AWS_ECR_FRONTEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }}
   AWS_ECR_BACKEND: ${GITHUB_REF##*/}-${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
 
-jobs:
-#   create_lb:
-#     runs-on: self-hosted
-#     env:
-#       TF_VAR_DB_NAME: ${{ secrets.TF_VAR_DB_NAME }}
-#       TF_VAR_DB_PASSWORD: ${{ secrets.TF_VAR_DB_PASSWORD }} 
-#       TF_VAR_DB_USERNAME: ${{ secrets.TF_VAR_DB_USERNAME }} 
-#       TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-#       TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-#       TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
-#     defaults: 
-#       run: 
-#         working-directory: terraform
-#     outputs:
-#       lb_dns_name: ${{ steps.lb_dns_name.outputs.lb_dns }}
-#     steps:
-#       - name: Checkout terraform
-#         uses: actions/checkout@v2
-        
-#       - name: Terraform initialization
-#         run: terraform init 
-        
-#       - name: Select workspace
-#         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
-        
-#       - name: Run terraform to create loadbalancer
-#         run: terraform apply -auto-approve -target module.load_balancer -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
-        
-#       - name: Refresh state
-#         run: terraform refresh -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
-        
-#       - name: Terraform output
-#         id: lb_dns_name
-#         run: echo "::set-output name=lb_dns::$(terraform output -raw load_balancer_dns_name)" 
-        
-#   create_repositories:
-#     runs-on: self-hosted
-#     outputs:
-#       ecr_frontend_uri: ${{ steps.ecr_frontend_uri.outputs.frontend_repository_uri }}
-#       ecr_backend_uri: ${{ steps.ecr_backend_uri.outputs.backend_repository_uri }}
-#       test: ${{ steps.test.outputs.test }}
-#     steps:
+jobs:    
+  build_and_push_frontend_image:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout frontend_repository
+        uses: actions/checkout@v2
+        with:
+          repository: Authorita-h/frontend_intern_Maksim
+          token: ${{ secrets.GIT_TOKEN }} 
       
-#       - name: Checkout
-#         uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-
-#       - name: Create frontend ECR repository
-#         id: ecr_frontend_uri
-#         run: | 
-#           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-#           $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ secrets.AWS_REGION }} --query 'repository.repositoryUri' || \
-#           aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ secrets.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))" \
-#           >> $GITHUB_ENV
-# #           echo "::set-output name=frontend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_FRONTEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_FRONTEND }} --query 'repositories[0].repositoryUri'))"
-      
-#       - name: Create backend ECR repository
-#         id: ecr_backend_uri
-#         run: |
-#           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
-#           $(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || \
-#           aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri'))" \
-#           >> $GITHUB_ENV
+      - name: Create frontend ECR repository
+        run: | 
+          echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
+          $(echo $(aws ecr create-repository \
+            --repository-name ${{ env.AWS_ECR_FRONTEND }} \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories \
+            --region ${{ env.AWS_REGION }} \
+            --repository-names ${{ env.AWS_ECR_FRONTEND }} \
+            --query 'repositories[0].repositoryUri'))" \
+          >> $GITHUB_ENV
           
-# #           echo "::set-output name=backend_repository_uri::$(echo $(aws ecr create-repository --repository-name ${{ env.AWS_ECR_BACKEND }} --region ${{ env.AWS_REGION }} --query 'repository.repositoryUri' || aws ecr describe-repositories --region ${{ env.AWS_REGION }} --repository-names ${{ env.AWS_ECR_BACKEND }} --query 'repositories[0].repositoryUri'))"
-         
-
-         
-#   build_and_push_frontend_image:
-#     runs-on: self-hosted
-#     needs: [create_lb]
-#     steps:
-#       - name: Checkout frontend_repository
-#         uses: actions/checkout@v2
-#         with:
-#           repository: Authorita-h/frontend_intern_Maksim
-#           token: ${{ secrets.GIT_TOKEN }} 
+      - name: Check ... 
+        run: echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
       
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
+      - name: Build docker images
+        run: docker build --build-arg 'backend=http://${{ needs.create_lb.outputs.lb_dns }}:${{ secrets.BACKEND_PORT }}' -t ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} .
+        
+      - name: Push repository
+        run: docker push ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}
+      
+  build_and_push_backend_image:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout frontend_repository
+        uses: actions/checkout@v2
+        with:
+          repository: Authorita-h/backend_intern_Maksim
+          token: ${{ secrets.GIT_TOKEN }} 
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-#       - name: Create frontend ECR repository
-#         run: | 
-#           echo "AWS_ECR_FRONTEND_REPOSITORY_URI=\
-#           $(echo $(aws ecr create-repository \
-#             --repository-name ${{ env.AWS_ECR_FRONTEND }} \
-#             --region ${{ secrets.AWS_REGION }} \
-#             --query 'repository.repositoryUri' || \
-#           aws ecr describe-repositories \
-#             --region ${{ env.AWS_REGION }} \
-#             --repository-names ${{ env.AWS_ECR_FRONTEND }} \
-#             --query 'repositories[0].repositoryUri'))" \
-#           >> $GITHUB_ENV
+      - name: Create backend ECR repository
+        run: | 
+          echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
+          $(echo $(aws ecr create-repository \
+            --repository-name ${{ env.AWS_ECR_BACKEND }} \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'repository.repositoryUri' || \
+          aws ecr describe-repositories \
+            --region ${{ env.AWS_REGION }} \
+            --repository-names ${{ env.AWS_ECR_BACKEND }} \
+            --query 'repositories[0].repositoryUri'))" \
+          >> $GITHUB_ENV
           
-#       - name: Check ... 
-#         run: echo ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} 
+      - name: Check ... 
+        run: echo ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }} 
       
-#       - name: Build docker images
-#         run: docker build --build-arg 'backend=http://${{ needs.create_lb.outputs.lb_dns }}:${{ secrets.BACKEND_PORT }}' -t ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }} .
+      - name: Build docker images
+        run: docker build -t ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }} .
         
-#       - name: Push repository
-#         run: docker push ${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}
-      
-#   build_and_push_backend_image:
-#     runs-on: self-hosted
-#     needs: [create_lb]
-#     steps:
-#       - name: Checkout frontend_repository
-#         uses: actions/checkout@v2
-#         with:
-#           repository: Authorita-h/backend_intern_Maksim
-#           token: ${{ secrets.GIT_TOKEN }} 
-      
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
-
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-
-#       - name: Create backend ECR repository
-#         run: | 
-#           echo "AWS_ECR_BACKEND_REPOSITORY_URI=\
-#           $(echo $(aws ecr create-repository \
-#             --repository-name ${{ env.AWS_ECR_BACKEND }} \
-#             --region ${{ secrets.AWS_REGION }} \
-#             --query 'repository.repositoryUri' || \
-#           aws ecr describe-repositories \
-#             --region ${{ env.AWS_REGION }} \
-#             --repository-names ${{ env.AWS_ECR_BACKEND }} \
-#             --query 'repositories[0].repositoryUri'))" \
-#           >> $GITHUB_ENV
-          
-#       - name: Check ... 
-#         run: echo ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }} 
-      
-#       - name: Build docker images
-#         run: docker build -t ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }} .
+      - name: Push repository
+        run: docker push ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}
         
-#       - name: Push repository
-#         run: docker push ${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}
+  create_hosted_zone:
+    runs-on: self-hosted
+    env:
+      TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
+    needs: [build_and_push_backend_image, build_and_push_frontend_image]
+    defaults: 
+      run: 
+        working-directory: terraform/hosted_zone
+    steps:
+      - name: Checkout hosted_zone
+        uses: actions/checkout@v2
         
+      - name: Terraform initialization
+        run: terraform init 
+        
+      - name: Run terraform
+        run: terraform destroy -auto-approve
+     
   create_infrastructure:
     runs-on: self-hosted
     env:
@@ -186,7 +125,7 @@ jobs:
       TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
-#     needs: [build_and_push_backend_image, build_and_push_frontend_image, create_lb]
+    needs: [create_hosted_zone]
     defaults: 
       run: 
         working-directory: terraform
@@ -230,6 +169,5 @@ jobs:
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
         
       - name: Run terraform
-        run: terraform destroy -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
-     
-        
+        run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
+   
