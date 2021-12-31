@@ -1,7 +1,7 @@
 [
     {
         "name": "${workspace}-frontend-service",
-        "image": "${image_repository_path}",
+        "image": ${image_repository_path},
         "memory": 256,
         "essentials": true,
         "portMappings": [
