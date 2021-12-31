@@ -168,11 +168,11 @@ jobs:
         
       - name: Select workspace
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
-        if: ${{ env.environment }} != "main"
+        if: ${{ env.environment != "main" }}
       
       - name: Select workspace
         run: terraform workspace select prod || terraform workspace new prod
-        if: ${{ env.environment }} == "main"
+        if: ${{ env.environment == "main" }}
         
       - name: Run terraform
         run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
