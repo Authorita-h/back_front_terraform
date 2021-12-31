@@ -125,6 +125,7 @@ jobs:
       TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
+      environment: ${GITHUB_REF##*/}
     needs: [create_hosted_zone]
     defaults: 
       run: 
@@ -167,11 +168,11 @@ jobs:
         
       - name: Select workspace
         run: terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
-        if: ${{ "main" != ${GITHUB_REF##*/} }}
+        if: ${{ env.environment != "main" }}
       
       - name: Select workspace
         run: terraform workspace select prod || terraform workspace new prod
-        if: ${{ "main" == ${GITHUB_REF##*/} }}
+        if: ${{ env.environment == "main" }}
         
       - name: Run terraform
         run: terraform apply -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
