@@ -41,11 +41,11 @@ jobs:
         
       - name: Output Frontend repositry url 
         id: frontend_url
-        run: echo "::set-mask::set-output name=frontend_url::$(terraform output -raw ecr_frontend)"
+        run: echo "::set-mask::$(::set-output name=frontend_url::$(terraform output -raw ecr_frontend))"
         
       - name: Output Backend repository url
         id: backend_url
-        run: echo "::set-mask::set-output name=backend_url::$(terraform output -raw ecr_backend)" 
+        run: echo "::set-mask::$(::set-output name=backend_url::$(terraform output -raw ecr_backend))" 
         
   build_frontend_image:
     runs-on: self-hosted
