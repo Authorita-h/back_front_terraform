@@ -170,15 +170,14 @@ jobs:
         
       - name: Select workspace
         if: ${{ env.environment != 'main' }}
-        run: |
-          terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
-          echo It's env.environment = ${{ env.environment }} 
+        run: echo It's env.environment = ${{ env.environment }} 
+#           terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
+          
       
       - name: Select workspace
         if: ${{ env.environment == 'main' }}
-        run: |
-          terraform workspace select prod || terraform workspace new prod
-          echo I'ts production 
+        run: echo I'ts production
+#           terraform workspace select prod || terraform workspace new prod
           
 #       - name: Run terraform
 #         run: terraform destroy -auto-approve -var='frontend_repository_url=${{ env.AWS_ECR_FRONTEND_REPOSITORY_URI }}' -var='backend_repository_url=${{ env.AWS_ECR_BACKEND_REPOSITORY_URI }}'
