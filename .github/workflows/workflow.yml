@@ -9,10 +9,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env: 
-  AWS_ECR_FRONTEND: ${{ secrets.AWS_ECR_FRONTEND_REPOSITORY_NAME }} 
-  AWS_ECR_BACKEND: ${{ secrets.AWS_ECR_BACKEND_REPOSITORY_NAME }}
-
 jobs: 
   create_hosted_zone:
     runs-on: self-hosted
