@@ -175,7 +175,7 @@ jobs:
           
       
       - name: Select workspace
-        if: ${GITHUB_REF##*/} == 'main'
+        if: github.ref != 'main'
         run: echo I'ts production
 #           terraform workspace select prod || terraform workspace new prod
           
