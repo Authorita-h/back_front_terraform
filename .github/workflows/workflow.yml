@@ -37,15 +37,15 @@ jobs:
         
       - name: Output certificate arn
         id: certificate_arn
-        run: echo "::set-output name=certificate_arn::$(terraform output certificate_arn)"
+        run: echo "::set-output name=certificate_arn::$(terraform output -raw certificate_arn)"
         
       - name: Output Frontend repositry url 
         id: frontend_url
-        run: echo "::set-output name=frontend_url::$(terraform output ecr_frontend)"
+        run: echo "::set-output name=frontend_url::$(terraform output -raw ecr_frontend)"
         
       - name: Output Backend repository url
         id: backend_url
-        run: echo "::set-output name=backend_url::$(terraform output ecr_backend)" 
+        run: echo "::set-output name=backend_url::$(terraform output -raw ecr_backend)" 
         
   build_frontend_image:
     runs-on: self-hosted
