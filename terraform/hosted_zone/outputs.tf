@@ -7,11 +7,11 @@ output "certificate_arn" {
 }
 
 output "ecr_frontend" {
-  value = module.repositories.ecr_frontend.repository_url
+  value = module.repositories.ecr_frontend
   sensitive = true
 }
 
 output "ecr_backend" {
-  value = module.repositories.ecr_backend.repository_url
+  value = module.repositories.ecr_backend
   sensitive = true
 }
