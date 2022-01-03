@@ -14,10 +14,6 @@ variable "load_balancer_zone_id" {
   type = string
 }
 
-variable "cert" {
-  
-}
-
 # variable "zone_id" {
 #   type = string
 # }
