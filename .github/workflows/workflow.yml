@@ -126,7 +126,6 @@ jobs:
       TF_VAR_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       TF_VAR_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       TF_VAR_site_domain: ${{ secrets.DOMAIN_NAME }}
-      environment: ${GITHUB_REF##*/}
       GITHUB_REF_MAIN_BRANCH: 'refs/heads/main'
 #     needs: [create_hosted_zone]
     needs: []
@@ -171,13 +170,13 @@ jobs:
         
       - name: Select workspace
         if: github.ref != ${{ env.GITHUB_REF_MAIN_BRANCH }} 
-        run: echo It's env.environment = ${{ env.environment }} also ${{ github.ref }} 
+        run: echo It's env.environment = ${{ github.ref }} 
 #           terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
           
       
       - name: Select workspace
         if: github.ref == ${{ env.GITHUB_REF_MAIN_BRANCH }}
-        run: echo I'ts production
+        run: echo It's production
 #           terraform workspace select prod || terraform workspace new prod
           
 #       - name: Run terraform
