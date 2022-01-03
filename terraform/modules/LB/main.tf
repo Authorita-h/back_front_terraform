@@ -74,7 +74,7 @@ resource "aws_lb_listener" "frontend_lb_listener" {
   load_balancer_arn = aws_lb.application_load_balancer.arn
   port = 443
   protocol = "HTTPS"
-  certificate_arn = aws_acm_certificate.cert.arn
+  certificate_arn = var.cert_arn
 
   default_action {
     target_group_arn = aws_lb_target_group.frontend_lb_target_group.arn
@@ -125,7 +125,7 @@ resource "aws_lb_listener_rule" "static" {
 
   condition {
     host_header {
-      values = ["aws-test.ml"]
+      values = [var.site_domain]
     }
   }
 }
@@ -165,8 +165,8 @@ resource "aws_lb_listener_rule" "api_workspace_forward" {
 }
 
 
-resource "aws_acm_certificate" "cert" {
-  domain_name       = var.site_domain
-  subject_alternative_names = ["*.${var.site_domain}"]
-  validation_method = "DNS"
-}
+# resource "aws_acm_certificate" "cert" {
+#   domain_name       = var.site_domain
+#   subject_alternative_names = ["*.${var.site_domain}"]
+#   validation_method = "DNS"
+# }

@@ -15,6 +15,7 @@ module "load_balancer" {
   frontend_port = var.frontend_port
   backend_port  = var.backend_port
   site_domain   = var.site_domain
+  cert_arn = var.cert_arn
 }
 
 module "rds_database" {
