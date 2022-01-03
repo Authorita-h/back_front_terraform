@@ -14,3 +14,14 @@ resource "aws_route53_zone" "route53_zone" {
   name = var.site_domain
 }
 
+module "repositories" {
+  source = "../modules/ECR"
+}
+
+module "certificate" {
+  source = "../modules/certificate"
+  site_domain = var.site_domain
+  depends_on = [
+    aws_route53_zone.route53_zone
+  ]
+}

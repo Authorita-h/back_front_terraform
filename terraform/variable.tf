@@ -40,6 +40,10 @@ variable "site_domain" {
   type = string
 }
 
+variable "cert_arn" {
+  type = string
+}
+
 # variable "backend_hostname" {
 #   type = string
 # }
