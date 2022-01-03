@@ -8,8 +8,10 @@ output "certificate_arn" {
 
 output "ecr_frontend" {
   value = module.repositories.ecr_frontend.repository_url
+  sensitive = true
 }
 
 output "ecr_backend" {
   value = module.repositories.ecr_backend.repository_url
+  sensitive = true
 }
