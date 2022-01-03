@@ -1,5 +1,11 @@
 variable "backend_repository_url" {
   type = string
+  default = data.terraform_remote_state.remote_state.outputs.ecr_backend
+}
+
+variable "backend_repository_url" {
+  type = string
+  default = data.terraform_remote_state.remote_state.outputs.ecr_frontend
 }
 
 variable "frontend_repository_url" {
