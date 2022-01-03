@@ -38,7 +38,6 @@ module "route53" {
   site_domain           = var.site_domain
   load_balancer_name    = module.load_balancer.load_balancer.dns_name
   load_balancer_zone_id = module.load_balancer.load_balancer.zone_id
-  cert                  = module.load_balancer.certificate
   # cert_record = module.load_balancer.certificate.
   # cert_value = module.load_balancer.certificate.resource_record_value
 }
