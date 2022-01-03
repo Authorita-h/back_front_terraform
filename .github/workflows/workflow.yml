@@ -62,6 +62,7 @@ jobs:
       
   build_backend_image:
     runs-on: self-hosted
+    needs: [create_hosted_zone]
     steps:
       - name: Checkout frontend_repository
         uses: actions/checkout@v2
