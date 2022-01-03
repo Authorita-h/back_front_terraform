@@ -15,6 +15,7 @@ module "load_balancer" {
   frontend_port = var.frontend_port
   backend_port  = var.backend_port
   site_domain   = var.site_domain
+  cert_arn = var.cert_arn
 }
 
 module "rds_database" {
@@ -37,7 +38,6 @@ module "route53" {
   site_domain           = var.site_domain
   load_balancer_name    = module.load_balancer.load_balancer.dns_name
   load_balancer_zone_id = module.load_balancer.load_balancer.zone_id
-  cert                  = module.load_balancer.certificate
   # cert_record = module.load_balancer.certificate.
   # cert_value = module.load_balancer.certificate.resource_record_value
 }
