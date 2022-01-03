@@ -169,13 +169,13 @@ jobs:
 #         run: terraform init 
         
       - name: Select workspace
-        if: ${ GITHUB_REF##*/ } != 'main' 
+        if: ${GITHUB_REF##*/} != 'main' 
         run: echo It's env.environment = ${{ env.environment }} 
 #           terraform workspace select ${GITHUB_REF##*/} || terraform workspace new ${GITHUB_REF##*/}
           
       
       - name: Select workspace
-        if: ${ GITHUB_REF##*/ } == 'main'
+        if: ${GITHUB_REF##*/} == 'main'
         run: echo I'ts production
 #           terraform workspace select prod || terraform workspace new prod
           
