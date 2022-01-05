@@ -15,6 +15,8 @@ resource "aws_ecs_service" "frontend_service" {
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.ecs_frontend_task_defenition.arn
   desired_count   = var.task_count
+  deployment_maximum_percent = var.deployment_maximum_healthy_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   network_configuration {
     security_groups  = [var.cluster_sg_id]
@@ -34,6 +36,8 @@ resource "aws_ecs_service" "backend_service" {
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.ecs_backend_task_defenition.arn
   desired_count   = var.task_count
+  deployment_maximum_percent = var.deployment_maximum_healthy_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   network_configuration {
     security_groups  = [var.cluster_sg_id]

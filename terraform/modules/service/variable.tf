@@ -92,3 +92,13 @@ variable "backend_port" {
 variable "site_domain" {
   type = string
 }
+
+variable "deployment_minimum_healthy_percent" {
+  type = number
+  default = 0
+}
+
+variable "deployment_maximum_healthy_percent" {
+  type = number
+  default = 100
+}
