@@ -8,6 +8,9 @@ on:
 
   workflow_dispatch:
 
+env: 
+  GITHUB_REF_MAIN_BRANCH: 'refs/heads/main'
+
 jobs: 
   create_hosted_zone:
     runs-on: self-hosted
@@ -114,7 +117,6 @@ jobs:
       TF_VAR_backend_repository_url: ${{ needs.create_hosted_zone.outputs.backend_url }}
       TF_VAR_frontend_repository_url: ${{ needs.create_hosted_zone.outputs.frontend_url }}
       TF_VAR_cert_arn: ${{ needs.create_hosted_zone.outputs.certificate_arn }}
-      GITHUB_REF_MAIN_BRANCH: 'refs/heads/main'
     needs: [create_hosted_zone, build_frontend_image, build_backend_image, push_images]
     defaults: 
       run: 
