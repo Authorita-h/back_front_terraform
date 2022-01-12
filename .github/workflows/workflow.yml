@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_TAG: ${{ ${GITHUB_REF##*/}-latest }}
+  IMAGE_TAG: ${GITHUB_REF##*/}-latest
 
 jobs: 
   create_hosted_zone:
