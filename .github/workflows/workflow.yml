@@ -54,7 +54,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }} 
       
       - name: Build docker images
-        run: docker build -t ${{ needs.create_hosted_zone.outputs.frontend_url }} -t ${GITHUB_REF##*/}-latest .
+        run: docker build -t ${{ needs.create_hosted_zone.outputs.frontend_url }}:${GITHUB_REF##*/}-latest .
       
   build_backend_image:
     runs-on: self-hosted
@@ -67,7 +67,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }} 
       
       - name: Build docker images
-        run: docker build -t ${{ needs.create_hosted_zone.outputs.backend_url }} -t ${GITHUB_REF##*/}-latest .
+        run: docker build -t ${{ needs.create_hosted_zone.outputs.backend_url }}:${GITHUB_REF##*/}-latest .
      
   push_images:
     runs-on: self-hosted
@@ -85,10 +85,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
         
       - name: Push frontend image
-        run: docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}
+        run: docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}:${GITHUB_REF##*/}-latest
       
       - name: Push backend image
-        run: docker push ${{ needs.create_hosted_zone.outputs.backend_url }}
+        run: docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:${GITHUB_REF##*/}-latest
    
   create_infrastructure:
     runs-on: self-hosted
