@@ -21,8 +21,7 @@ jobs:
       frontend_url: ${{ steps.frontend_url.outputs.frontend_url }}
       backend_url: ${{ steps.backend_url.outputs.backend_url }}
     steps:
-      - name: Test
-        run: echo ${{ env.IMAGE_TAG }}
+
       - name: Checkout hosted_zone
         uses: actions/checkout@v2
         
