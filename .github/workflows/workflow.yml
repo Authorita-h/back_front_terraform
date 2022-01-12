@@ -47,6 +47,7 @@ jobs:
   #       run: echo "::set-output name=backend_url::$(terraform output -raw ecr_backend)" 
   
   create_tags:
+    runs-on: self-hosted
     outputs:
       image_tag: ${{ steps.image_tag.outputs.tag }}
     
