@@ -79,7 +79,7 @@ jobs:
         if: ${{ github.ref != env.GITHUB_REF_MAIN_BRANCH }}
       
       - name: Build docker image
-        run: docker build -t ${{ needs.create_hosted_zone.outputs.frontend_url }}:prod-latest .
+        run: docker build -t ${{ needs.create_hosted_zone.outputs.backend_url }}:prod-latest .
         if: ${{ github.ref == env.GITHUB_REF_MAIN_BRANCH }}
      
   push_images:
@@ -103,7 +103,7 @@ jobs:
           docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:${GITHUB_REF##*/}-latest
         if: ${{ github.ref != env.GITHUB_REF_MAIN_BRANCH }}
       
-      - name: Push backend image
+      - name: Push images
         run: |
           docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:prod-latest
           docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}:prod-latest
