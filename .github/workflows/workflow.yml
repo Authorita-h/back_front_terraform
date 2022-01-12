@@ -82,10 +82,10 @@ jobs:
 
       - name: Create tag for prod
         run: echo "ACTIONS_IMAGE_TAG=prod-latest"
-        if: ${{ github.ref == env.GITHUB_REF_MAIN_BRANCH }}
+        if: ${{ github.ref == env.GITHUB_REF_MAIN_BRANCH }} >> $GITHUB_ENV
       
       - name: Create tag for environment
-        run: echo "ACTIONS_IMAGE_TAG=${GITHUB_REF##*/}-latest"
+        run: echo "ACTIONS_IMAGE_TAG=${GITHUB_REF##*/}-latest" >> $GITHUB_ENV
         if: ${{ github.ref != env.GITHUB_REF_MAIN_BRANCH }}
 
       - name: Login to Amazon ECR
