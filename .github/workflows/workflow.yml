@@ -81,12 +81,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Create tag for prod
-        run: echo "ACTIONS_IMAGE_TAG=prod-latest" >> $GITHUB_ENV
         if: ${{ github.ref == env.GITHUB_REF_MAIN_BRANCH }} 
+        run: echo "ACTIONS_IMAGE_TAG=prod-latest" >> $GITHUB_ENV
       
       - name: Create tag for environment
-        run: echo "ACTIONS_IMAGE_TAG=${GITHUB_REF##*/}-latest" >> $GITHUB_ENV
         if: ${{ github.ref != env.GITHUB_REF_MAIN_BRANCH }}
+        run: echo "ACTIONS_IMAGE_TAG=${GITHUB_REF##*/}-latest" >> $GITHUB_ENV
 
       - name: Login to Amazon ECR
         id: login-ecr
