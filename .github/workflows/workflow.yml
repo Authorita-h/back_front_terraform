@@ -97,12 +97,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         
-      - name: Push frontend image
-        run: docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}:${GITHUB_REF##*/}-latest
+      - name: Push images
+        run: |
+          docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}:${GITHUB_REF##*/}-latest
+          docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:${GITHUB_REF##*/}-latest
         if: ${{ github.ref != env.GITHUB_REF_MAIN_BRANCH }}
       
       - name: Push backend image
-        run: docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:prod-latest
+        run: |
+          docker push ${{ needs.create_hosted_zone.outputs.backend_url }}:prod-latest
+          docker push ${{ needs.create_hosted_zone.outputs.frontend_url }}:prod-latest
         if: ${{ github.ref == env.GITHUB_REF_MAIN_BRANCH }}
    
   create_infrastructure:
